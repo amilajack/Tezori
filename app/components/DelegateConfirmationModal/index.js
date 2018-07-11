@@ -60,7 +60,7 @@ class DelegateConfirmationModal extends Component<Props> {
           </div>
           <div className={styles.confirmationContainer}>
             <TextField
-              floatingLabelText="Enter Wallet Password"
+              floatingLabelText="Wallet Password"
               style={{ width: '50%' }}
               type="password"
               value={password}

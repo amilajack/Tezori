@@ -157,7 +157,7 @@ class AddDelegateModal extends Component<Props> {
         </div>
         <div className={styles.amountAndFeeContainer}>
           <TextField
-            floatingLabelText="Password"
+            floatingLabelText="Wallet Password"
             type="password"
             style={{ width: '100%' }}
             onChange={this.updatePassPhrase}
