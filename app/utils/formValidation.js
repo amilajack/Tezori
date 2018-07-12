@@ -20,7 +20,7 @@ export function displayError(validations) {
   return false;
 }
 /**
- * 
+ *
  * @param value { string | string[] }
  * @param validateType { string }
  * @returns { false | string }
@@ -41,7 +41,7 @@ export default function hasError(value, validateType, name) {
       if ( value.length < 36 ) {
         return hasLength(36, 'Address');
       }
-      
+
       if ( !RegExp('^tz1|^KT1').test(value)) {
         return `Address must begin with tz1 or KT1.`;
       }
@@ -63,7 +63,7 @@ export default function hasError(value, validateType, name) {
     //       return 'Corrupt .tezwallet file';
     //   }
     //   break;
-    case 'minLength8': 
+    case 'minLength8':
       if ( value.length < 8 ) {
         return minLength(8, name);
       }
