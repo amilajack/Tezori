@@ -1,9 +1,12 @@
 {
-  "name": "Tezori",
-  "version": "0.1.0",
+  "name": "Galleon Beta",
+  "version": "0.1.0b",
   "logo": "tezosLogo.svg",
   "icon": "tezos",
-  "termsService": "https://github.com/Cryptonomic/Tezos-Wallet",
-  "privacyPolicy": "https://github.com/Cryptonomic/Tezos-Wallet",
-  "tagline": "A community wallet for Tezos"
+  "termsService": "https://github.com/Cryptonomic/Deployments/raw/master/Galleon/Terms_of_Service.pdf",
+  "privacyPolicy": "https://github.com/Cryptonomic/Deployments/raw/master/Galleon/Privacy_Policy.pdf",
+  "tagline": ""
 }
+
+
+
