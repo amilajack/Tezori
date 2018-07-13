@@ -108,7 +108,7 @@ const InputValid = (props: Props) => {
         />}
 
         <EyeIcon
-          iconName={props.isShowed? 'view-hide': 'view-show'}
+          iconName={props.isShowed? 'view-show': 'view-hide'}
           size={ms(2)}
           color="secondary"
           onClick={props.onShow}
@@ -118,7 +118,6 @@ const InputValid = (props: Props) => {
         {!!props.crackTime && <CrackTime color={borderColor} dangerouslySetInnerHTML={{ __html: props.crackTime }} />}
         {!!props.suggestion && <Suggestion>{props.suggestion}</Suggestion>}
       </PasswordStrengthSuggestions>
-
     </Container>
   )
 };
