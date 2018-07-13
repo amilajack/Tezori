@@ -63,7 +63,7 @@ const RowInputs = styled.div`
 `
 
 const ImportButton = styled(Button)`
-  margin: ${ms(6)} 0 0 0;
+  margin: ${ms(3)} 0 0 0;
 `
 
 const StyledTooltip = styled(Tooltip)`
@@ -198,6 +198,24 @@ class AddAddress extends Component<Props> {
               value={ seed }
               onChange={(_, newSeed) => this.setState({ seed: newSeed })}
             />
+            <InputWithTooltip>
+              <TextField
+                floatingLabelText="Public key hash"
+                style={{ width: '100%', padding: `0 ${ms(3)} 0 0` }}
+                value={ pkh }
+                onChange={(_, newPkh) => this.setState({ pkh: newPkh })}
+              />
+              <StyledTooltip position="bottom" content={PkhTooltip}>
+                <Button buttonTheme="plain">
+                  <HelpIcon
+                    iconName="help"
+                    size={ms(0)}
+                    color="secondary"
+                  />
+                </Button>
+              </StyledTooltip>
+            </InputWithTooltip>
+
             <RowInputs>
               <InputWithTooltip>
                 <TextField
@@ -221,26 +239,6 @@ class AddAddress extends Component<Props> {
 
               <InputWithTooltip>
                 <TextField
-                  floatingLabelText="Public key hash"
-                  style={{ width: '100%', padding: `0 ${ms(3)} 0 0` }}
-                  value={ pkh }
-                  onChange={(_, newPkh) => this.setState({ pkh: newPkh })}
-                />
-                <StyledTooltip position="bottom" content={PkhTooltip}>
-                  <Button buttonTheme="plain">
-                    <HelpIcon
-                      iconName="help"
-                      size={ms(0)}
-                      color="secondary"
-                    />
-                  </Button>
-                </StyledTooltip>
-              </InputWithTooltip>
-            </RowInputs>
-
-            <RowInputs>
-              <InputWithTooltip>
-                <TextField
                   floatingLabelText="Fundraiser Email Address"
                   style={{ width: '100%', padding: `0 ${ms(3)} 0 0` }}
                   value={username}
@@ -257,7 +255,9 @@ class AddAddress extends Component<Props> {
                   </Button>
                 </StyledTooltip>
               </InputWithTooltip>
+            </RowInputs>
 
+            <RowInputs>
               <InputWithTooltip>
                 <TextField
                   floatingLabelText="Activation Code"
@@ -265,6 +265,7 @@ class AddAddress extends Component<Props> {
                   value={activationCode}
                   onChange={(_, newActivationCode) => this.setState({ activationCode: newActivationCode })}
                 />
+
                 <StyledTooltip position="bottom" content={ActivationTooltip}>
                   <Button buttonTheme="plain">
                     <HelpIcon
@@ -275,14 +276,15 @@ class AddAddress extends Component<Props> {
                   </Button>
                 </StyledTooltip>
               </InputWithTooltip>
-              </RowInputs>
-            <ImportButton
-              buttonTheme="primary"
-              onClick={this.importAddress}
-              disabled={isLoading}
-            >
-              Import
-            </ImportButton>
+
+              <ImportButton
+                buttonTheme="primary"
+                onClick={this.importAddress}
+                disabled={isLoading}
+              >
+                Import
+              </ImportButton>
+            </RowInputs>
           </Fragment>
         );
     }
