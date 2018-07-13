@@ -158,6 +158,14 @@ class AddressBlock extends Component<Props, State> {
     )
   }
 
+  renderNoSmartAddressButton = () => {
+      return(
+        <NoSmartAddressesButton small buttonTheme="secondary" onClick={this.openDelegateModal}>
+          Add a Delegate
+        </NoSmartAddressesButton>
+    )
+  }
+
   render() {
     const { isDelegateModalOpen } = this.state;
     const { accountBlock, selectedAccountHash, accountIndex, theme } = this.props;
@@ -292,9 +300,7 @@ class AddressBlock extends Component<Props, State> {
               Delegation Tips
             </NoSmartAddressesTitle>
               {this.renderNoSmartAddressesDescription(noSmartAddressesDescriptionContent)}
-            <NoSmartAddressesButton small buttonTheme="secondary" onClick={this.openDelegateModal}>
-              Add a Delegate
-            </NoSmartAddressesButton>
+              {isManagerReady ? this.renderNoSmartAddressButton() : null}
           </NoSmartAddressesContainer>
           )
         }
