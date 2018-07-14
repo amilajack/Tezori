@@ -1,9 +1,11 @@
 {
-  "name": "Galleon Beta",
+  "name": "Galleon Prod",
   "version": "0.1.0b",
+  "network": "betanet",
+  "blockExplorerHost": "http://tzscan.io/",
   "logo": "tezosLogo.svg",
   "icon": "tezos",
-  "termsService": "https://github.com/Cryptonomic/Deployments/raw/master/Galleon/Terms_of_Service.pdf",
-  "privacyPolicy": "https://github.com/Cryptonomic/Deployments/raw/master/Galleon/Privacy_Policy.pdf",
+  "termsService": "https://github.com/Cryptonomic/Deployments/blob/master/Terms_of_Service.pdf",
+  "privacyPolicy": "https://github.com/Cryptonomic/Deployments/blob/master/Privacy_Policy.pdf",
   "tagline": ""
 }

@@ -5,14 +5,20 @@
     {
       "name": "Cryptonomic-Nautilus",
       "type": "TEZOS",
-      "url": "https://tezos-prod.cryptonomic-infra.tech",
+      "url": "https://tezos-prod.cryptonomic-infra.tech/",
+      "apiKey": ""
+    },
+    {
+      "name": "Blockscale",
+      "type": "TEZOS",
+      "url": "https://rpc.tzbeta.net/",
       "apiKey": ""
     },
     {
       "name": "Cryptonomic-Conseil",
       "type": "CONSEIL",
-      "url": "https://conseil-prod.cryptonomic-infra.tech",
-      "apiKey": "hooman"
+      "url": "https://conseil-prod.cryptonomic-infra.tech/tezos/betanet",
+      "apiKey": "galleon"
     }
   ]
 }
