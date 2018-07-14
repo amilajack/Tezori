@@ -11,7 +11,7 @@
     {
       "name": "Cryptonomic-Conseil",
       "type": "CONSEIL",
-      "url": "https://conseil-staging.cryptonomic-infra.tech",
+      "url": "https://conseil-staging.cryptonomic-infra.tech/tezos/zeronet",
       "apiKey": "hooman"
     }
   ]
