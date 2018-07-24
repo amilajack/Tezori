@@ -1,4 +1,7 @@
 {
+  "general":{
+    "amount": "Amount"
+  },
   "login": {
     "create_new_wallet_btn": "Create New Wallet",
     "open_exisiting_wallet_btn": "Open Existing Wallet",

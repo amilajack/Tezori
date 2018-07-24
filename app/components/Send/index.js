@@ -1,22 +1,23 @@
 // @flow
 import React, { Component } from 'react';
 import { TextField } from 'material-ui';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import Button from './Button';
-import { ms } from '../styles/helpers';
-import TezosIcon from './TezosIcon';
-import SendConfirmationModal from './SendConfirmationModal';
+import Button from '../Button/';
+import { ms } from '../../styles/helpers';
+import TezosIcon from '../TezosIcon/';
+import SendConfirmationModal from '../SendConfirmationModal/';
+import { wrapComponent } from '../../utils/i18n';
 
 import {
   validateAmount,
   sendTez,
   fetchTransactionAverageFees
-} from '../reduxContent/sendTezos/thunks';
+} from '../../reduxContent/sendTezos/thunks';
 
-import Fees from './Fees/';
+import Fees from '../Fees/';
 
 const SendContainer = styled.div`
   display: flex;
@@ -44,7 +45,7 @@ const InputAmount = styled.div`
 `;
 const TezosIconInput = styled(TezosIcon)`
   position: absolute;
-  right: 0px;
+  right: 20px;
   top: 40px;
   display: block;
 `;
@@ -75,7 +76,7 @@ class Send extends Component<Props> {
   props: Props;
   state = initialState;
 
-  async componentDidMount() {
+  async componentWillMount() {
     const { fetchTransactionAverageFees } = this.props;
     const averageFees = await fetchTransactionAverageFees();
     this.setState({ averageFees, fee: averageFees.low });
@@ -121,7 +122,7 @@ class Send extends Component<Props> {
   };
 
   render() {
-    const { isReady } = this.props;
+    const { isReady, t } = this.props;
 
     const {
       isLoading,
@@ -144,7 +145,7 @@ class Send extends Component<Props> {
         <AmountContainer>
           <InputAmount>
             <TextField
-              floatingLabelText="Amount"
+              floatingLabelText={t('general.amount')}
               style={{ width: '100%' }}
               value={amount}
               onChange={this.handleAmountChange}
@@ -194,4 +195,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(null, mapDispatchToProps)(Send);
+export default compose(wrapComponent, connect(null, mapDispatchToProps))(Send);
