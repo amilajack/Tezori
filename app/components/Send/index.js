@@ -7,9 +7,9 @@ import styled from 'styled-components';
 
 import Button from '../Button/';
 import { ms } from '../../styles/helpers';
-import TezosIcon from '../TezosIcon/';
 import SendConfirmationModal from '../SendConfirmationModal/';
 import { wrapComponent } from '../../utils/i18n';
+import TezosNumericInput from '../TezosNumericInput'
 
 import {
   validateAmount,
@@ -43,19 +43,14 @@ const InputAmount = styled.div`
   width: 50%;
   margin-right: 50px;
 `;
-const TezosIconInput = styled(TezosIcon)`
-  position: absolute;
-  right: 20px;
-  top: 40px;
-  display: block;
-`;
 
 type Props = {
   isReady?: boolean,
   sendTez?: Function,
   selectedAccountHash?: string,
   selectedParentHash?: string,
-  validateAmount?: Function
+  validateAmount?: Function,
+  t: Function
 };
 
 const initialState = {
@@ -63,7 +58,7 @@ const initialState = {
   isConfirmationModalOpen: false,
   password: '',
   toAddress: '',
-  amount: '',
+  amount: null,
   fee: 100,
   averageFees: {
     low: 100,
@@ -89,7 +84,7 @@ class Send extends Component<Props> {
   };
   handlePasswordChange = (_, password) => this.setState({ password });
   handleToAddressChange = (_, toAddress) => this.setState({ toAddress });
-  handleAmountChange = (_, amount) => this.setState({ amount });
+  handleAmountChange = (_, amount,) => this.setState({ amount });
   handleFeeChange = fee => this.setState({ fee });
   setIsLoading = isLoading => this.setState({ isLoading });
 
@@ -144,14 +139,7 @@ class Send extends Component<Props> {
         />
         <AmountContainer>
           <InputAmount>
-            <TextField
-              floatingLabelText={t('general.amount')}
-              style={{ width: '100%' }}
-              value={amount}
-              onChange={this.handleAmountChange}
-              type="number"
-            />
-            <TezosIconInput color="secondary" iconName="tezos" />
+            <TezosNumericInput labelText={t('general.amount')} amount={this.state.amount}  handleAmountChange={this.handleAmountChange} />
           </InputAmount>
           <Fees
             styles={{ width: '50%' }}

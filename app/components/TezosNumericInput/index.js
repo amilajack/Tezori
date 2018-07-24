@@ -18,7 +18,7 @@ const NumericInput = styled.div`
 
 type Props = {
   handleAmountChange: Function,
-  amount: string | number | null,
+  amount: number | null | string,
   labelText: string
 };
 
@@ -32,7 +32,7 @@ const TezosNumericInput = (props: Props) =>
         onChange={props.handleAmountChange}
         type="text"
       >
-        <CurrencyInput value={props.amount}  onChangeEvent={props.handleAmountChange} />
+        <CurrencyInput allowEmpty value={props.amount}  onChangeEvent={props.handleAmountChange} />
       </TextField>
       <TezosIconInput color="secondary" iconName="tezos" />
     </NumericInput>

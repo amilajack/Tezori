@@ -1,6 +1,7 @@
 {
   "general":{
-    "amount": "Amount"
+    "amount": "Amount",
+    "custom_fee": "Custom Fee"
   },
   "login": {
     "create_new_wallet_btn": "Create New Wallet",
