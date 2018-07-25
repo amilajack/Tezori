@@ -83,7 +83,7 @@ class Send extends Component<Props> {
     const { averageFees, fee } = this.state;
     this.setState({ ...initialState, averageFees, fee });
   };
-  handlePasswordChange = (_, password) => this.setState({ password });
+  handlePasswordChange = (password) => this.setState({ password });
   handleToAddressChange = (_, toAddress) => this.setState({ toAddress });
   handleAmountChange = (_, maskedAmount, amount) => this.setState({ amount });
   handleFeeChange = fee => this.setState({ fee });
