@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import Button from '../Button/';
 import { ms } from '../../styles/helpers';
-import SendConfirmationModal from '../SendConfirmationModal/';
+import SendConfirmationModal from '../SendConfirmationModal';
 import { wrapComponent } from '../../utils/i18n';
 import TezosNumericInput from '../TezosNumericInput'
 
@@ -60,6 +60,7 @@ const initialState = {
   toAddress: '',
   amount: null,
   fee: 100,
+  isShowedPwd: false,
   averageFees: {
     low: 100,
     medium: 200,
@@ -126,7 +127,8 @@ class Send extends Component<Props> {
       toAddress,
       amount,
       fee,
-      averageFees
+      averageFees,
+      isShowedPwd
     } = this.state;
 
     return (
@@ -167,6 +169,8 @@ class Send extends Component<Props> {
           onPasswordChange={this.handlePasswordChange}
           onSend={this.onSend}
           isLoading={isLoading}
+          isShowedPwd={isShowedPwd}
+          onShowPwd={()=> this.setState({isShowedPwd: !isShowedPwd})}
         />
       </SendContainer>
     );

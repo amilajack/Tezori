@@ -12,7 +12,6 @@ import { H2 } from './../Heading/';
 import { wrapComponent } from '../../utils/i18n';
 import TezosNumericInput from '../TezosNumericInput'
 
-
 import { formatAmount, tezToUtez } from '../../utils/currancy';
 
 type Props = {
