@@ -58,7 +58,7 @@ const initialState = {
   isConfirmationModalOpen: false,
   password: '',
   toAddress: '',
-  amount: null,
+  amount: '',
   fee: 100,
   isShowedPwd: false,
   averageFees: {
@@ -85,7 +85,7 @@ class Send extends Component<Props> {
   };
   handlePasswordChange = (password) => this.setState({ password });
   handleToAddressChange = (_, toAddress) => this.setState({ toAddress });
-  handleAmountChange = (_, maskedAmount, amount) => this.setState({ amount });
+  handleAmountChange = (amount) => this.setState({ amount }, ()=>console.log(this.state.amount));
   handleFeeChange = fee => this.setState({ fee });
   setIsLoading = isLoading => this.setState({ isLoading });
 
