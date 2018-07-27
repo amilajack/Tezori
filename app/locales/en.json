@@ -1,7 +1,8 @@
 {
   "general":{
     "amount": "Amount",
-    "custom_fee": "Custom Fee"
+    "custom_fee": "Custom Fee",
+    "decimal_separator": "."
   },
   "login": {
     "create_new_wallet_btn": "Create New Wallet",
