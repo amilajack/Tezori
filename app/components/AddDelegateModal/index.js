@@ -15,6 +15,7 @@ import Button from '../Button/';
 import Loader from '../Loader/';
 import Fees from '../Fees/';
 import PasswordInput from '../PasswordInput';
+import TezosAmount from '../TezosAmount/';
 
 import {
   createNewAccount,
@@ -27,7 +28,8 @@ type Props = {
   fetchOriginationAverageFees: Function,
   open: boolean,
   onCloseClick: Function,
-  t: Function
+  t: Function,
+  managerBalance: number
 };
 
 const HelpIcon = styled(TezosIcon)`
@@ -73,18 +75,21 @@ const TooltipContent2 = styled.div`
 
 const AmountFeePassContainer = styled.div`
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
+  width: 45%;
+  justify-content: center;
 `;
 
 const AmountSendContainer = styled.div`
-  width: 45%;
+  width: 100%;
   position: relative;
+  height: 64px;
 `;
 
 const FeeContainer = styled.div`
-  width: 45%;
+  width: 100%;
   display: flex;
+  height: 64px;
 `;
 
 const PasswordButtonContainer = styled.div`
@@ -98,6 +103,80 @@ const DelegateButton = styled(Button)`
   width: 194px;
   height: 50px;
 `;
+const MainContainer = styled.div`
+  display: flex;
+`
+
+const BalanceContainer = styled.div`
+  padding: 0 0px 0 20px;
+  flex: 1;
+  position: relative;
+  margin: 15px 0 0px 40px;
+
+`
+const BalanceArrow = styled.div`
+  top: 50%;
+  left: 4px;
+  margin-top: -17px;
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  border-right: 20px solid ${({ theme: { colors } }) => colors.gray1};;
+  width: 0;
+  height: 0;
+  position: absolute;
+`
+const BalanceContent = styled.div`
+  padding: ${ms(1)} ${ms(1)} ${ms(1)} ${ms(4)};
+  color: #123262;
+  text-align: left;
+  height: 100%;
+  background-color: ${({ theme: { colors } }) => colors.gray1};
+`
+const GasInputContainer = styled.div`
+  width: 100%;
+  position: relative;
+  height: 64px;
+`
+
+const TezosIconInput = styled(TezosIcon)`
+  position: absolute;
+  left: 70px;
+  top: 43px;
+  display: block;
+`;
+
+const UseMax = styled.div`
+  position: absolute;
+  right: 23px;
+  top: 38px;
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+  color: ${({ theme: { colors } }) => colors.accent};
+  cursor: pointer;
+`;
+const TotalAmount = styled(TezosAmount)`
+  margin-bottom: 22px;
+`;
+const BalanceAmount = styled(TezosAmount)`
+`;
+
+const WarningIcon = styled(TezosIcon)`
+  padding: 0 ${ms(-9)} 0 0;
+`;
+const BalanceTitle = styled.div`
+  color: ${({ theme: { colors } }) => colors.gray5};
+  font-size: 14px;
+`;
+const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${({ theme: { colors } }) => colors.error1};
+`
+
+const utez = 1000000;
 
 const defaultState = {
   isLoading: false,
@@ -110,7 +189,10 @@ const defaultState = {
     low: 100,
     medium: 200,
     high: 400
-  }
+  },
+  gas: 257000,
+  total: 0,
+  balance: 1
 };
 
 class AddDelegateModal extends Component<Props> {
@@ -118,16 +200,40 @@ class AddDelegateModal extends Component<Props> {
   state = defaultState;
 
   async componentDidUpdate(prevProps) {
-    const { open, fetchOriginationAverageFees } = this.props;
+    const { open, fetchOriginationAverageFees, managerBalance } = this.props;
     if (open && open !== prevProps.open) {
       const averageFees = await fetchOriginationAverageFees();
-      this.setState({ averageFees, fee: averageFees.low });// eslint-disable-line react/no-did-update-set-state
+      this.setState({ averageFees, fee: averageFees.low, balance: managerBalance });// eslint-disable-line react/no-did-update-set-state
     }
   }
 
-  changeAmount = (amount) => this.setState({ amount });
+  onUseMax = () => {
+    const { managerBalance } = this.props;
+    const { fee, gas } = this.state;
+    const max = managerBalance - fee - gas - 1;
+    const amount = max.toString();
+    const total = managerBalance - 1;
+    const balance = 1;
+    this.setState({ amount, total, balance });
+  }
+
+  changeAmount = (amount) => {
+    const { managerBalance } = this.props;
+    const { fee, gas } = this.state;
+    const numAmount = parseFloat(amount);
+    const total = numAmount + fee + gas;
+    const balance = managerBalance - total;
+    this.setState({ amount, total, balance });
+  }
+  
   changeDelegate = (_, delegate) => this.setState({ delegate });
-  changeFee = (fee) => this.setState({ fee });
+  changeFee = (fee) => {
+    const { managerBalance } = this.props;
+    const { gas } = this.state;
+    const total = managerBalance + fee + gas;
+    const balance = managerBalance - total;
+    this.setState({ fee, total, balance });
+  }
   updatePassPhrase = (passPhrase) => this.setState({ passPhrase });
   setIsLoading = (isLoading) =>  this.setState({ isLoading });
 
@@ -146,6 +252,14 @@ class AddDelegateModal extends Component<Props> {
             'You can only delegate to the Manager Address. The Manager Address always starts with "tz1".'
           }
         </TooltipContent2>
+      </TooltipContainer>
+    );
+  };
+
+  renderGasToolTip = (gas) => {
+    return (
+      <TooltipContainer>
+        {gas} tz is required by the network to create a delegate address
       </TooltipContainer>
     );
   };
@@ -172,9 +286,8 @@ class AddDelegateModal extends Component<Props> {
 
   render() {
     const { open, onCloseClick, t } = this.props;
-    const { isLoading, averageFees, delegate, amount, fee, passPhrase, isShowedPwd } = this.state;
+    const { isLoading, averageFees, delegate, amount, fee, passPhrase, isShowedPwd, gas, total ,balance } = this.state;
     const isDisabled = isLoading || !delegate || !amount || !passPhrase;
-
     return (
       <Dialog
         modal
@@ -222,30 +335,92 @@ class AddDelegateModal extends Component<Props> {
             </TextfieldTooltip>
           </Tooltip>
         </DelegateContainer>
-        <AmountFeePassContainer>
-          <AmountSendContainer>
-            <TezosNumericInput decimalSeparator={t('general.decimal_separator')} labelText={t('general.amount')} amount={this.state.amount}  handleAmountChange={this.changeAmount} />
-          </AmountSendContainer>
-          <FeeContainer>
-            <Fees
-              style={{ width: '50%' }}
-              low={averageFees.low}
-              medium={averageFees.medium}
-              high={averageFees.high}
-              fee={fee}
-              onChange={this.changeFee}
-            />
-          </FeeContainer>
-        </AmountFeePassContainer>        
-        
-        <PasswordInput
-          label='Wallet Password'
-          isShowed={isShowedPwd}
-          changFunc={this.updatePassPhrase}
-          onShow={()=> this.setState({isShowedPwd: !isShowedPwd})}   
-        />
-       
+        <MainContainer>
+          <AmountFeePassContainer>
+            <AmountSendContainer>
+              <TezosNumericInput decimalSeparator={t('general.decimal_separator')} labelText={t('general.amount')} amount={this.state.amount}  handleAmountChange={this.changeAmount} />
+              <UseMax onClick={this.onUseMax}>Use Max</UseMax>
+            </AmountSendContainer>
+            <FeeContainer>
+              <Fees
+                styles={{ width: '100%' }}
+                low={averageFees.low}
+                medium={averageFees.medium}
+                high={averageFees.high}
+                fee={fee}
+                onChange={this.changeFee}
+              />
+            </FeeContainer>
+            <GasInputContainer>
+              <TextField
+                disabled
+                floatingLabelText="Gas"
+                defaultValue="0.257000"
+                style={{ width: '100%' }}
+              />
+              <TezosIconInput color="gray5" iconName="tezos" />
+              <Tooltip
+                position="bottom"
+                content={this.renderGasToolTip(gas/utez)}
+                align={{
+                  offset: [70, 0]
+                }}
+                arrowPos={{
+                  left: '71%'
+                }}
+              >
+                <TextfieldTooltip
+                  buttonTheme="plain"
+                >
+                  <HelpIcon
+                    iconName="help"
+                    size={ms(0)}
+                    color='secondary'
+                  />
+                </TextfieldTooltip>
+              </Tooltip>
+            </GasInputContainer>
+          </AmountFeePassContainer>
+          <BalanceContainer>
+            <BalanceArrow />
+            <BalanceContent>
+              <BalanceTitle>Total</BalanceTitle>
+              <TotalAmount
+                weight='500'
+                color="gray3"
+                size={ms(1)}
+                amount={total}
+              />              
+              <BalanceTitle>Remaining Balance</BalanceTitle>
+              <BalanceAmount
+                weight='500'
+                color="gray3"
+                size={ms(-1)}
+                amount={balance}
+              />
+              {balance < 1 &&
+                <ErrorContainer>
+                  <WarningIcon
+                    iconName="warning"
+                    size={ms(-1)}
+                    color='error1'
+                  />
+                  Total exceeds available funds.
+                </ErrorContainer>
+              }
+              
+            </BalanceContent>
+          </BalanceContainer>
+        </MainContainer>
+
         <PasswordButtonContainer>
+          <PasswordInput
+            label='Wallet Password'
+            isShowed={isShowedPwd}
+            changFunc={this.updatePassPhrase}
+            containerStyle={{width: '60%'}}
+            onShow={()=> this.setState({isShowedPwd: !isShowedPwd})}   
+          />
           <DelegateButton
             buttonTheme="primary"
             disabled={isLoading || isDisabled}
