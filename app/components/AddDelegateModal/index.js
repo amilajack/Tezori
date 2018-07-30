@@ -211,7 +211,7 @@ class AddDelegateModal extends Component<Props> {
     const { managerBalance } = this.props;
     const { fee, gas } = this.state;
     const max = managerBalance - fee - gas - 1;
-    const amount = max.toString();
+    const amount = (max/utez).toFixed(6);
     const total = managerBalance - 1;
     const balance = 1;
     this.setState({ amount, total, balance });
@@ -220,7 +220,7 @@ class AddDelegateModal extends Component<Props> {
   changeAmount = (amount) => {
     const { managerBalance } = this.props;
     const { fee, gas } = this.state;
-    const numAmount = parseFloat(amount);
+    const numAmount = parseFloat(amount) * utez;
     const total = numAmount + fee + gas;
     const balance = managerBalance - total;
     this.setState({ amount, total, balance });
@@ -356,7 +356,7 @@ class AddDelegateModal extends Component<Props> {
                 disabled
                 floatingLabelText="Gas"
                 defaultValue="0.257000"
-                style={{ width: '100%' }}
+                style={{ width: '100%', cursor: 'default' }}
               />
               <TezosIconInput color="gray5" iconName="tezos" />
               <Tooltip
