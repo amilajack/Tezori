@@ -181,7 +181,7 @@ const utez = 1000000;
 const defaultState = {
   isLoading: false,
   delegate: '',
-  amount: '',
+  amount: '0',
   fee: 100,
   passPhrase: '',
   isShowedPwd: false, 
@@ -190,9 +190,7 @@ const defaultState = {
     medium: 200,
     high: 400
   },
-  gas: 257000,
-  total: 0,
-  balance: 1
+  gas: 257000
 };
 
 class AddDelegateModal extends Component<Props> {
@@ -203,7 +201,9 @@ class AddDelegateModal extends Component<Props> {
     const { open, fetchOriginationAverageFees, managerBalance } = this.props;
     if (open && open !== prevProps.open) {
       const averageFees = await fetchOriginationAverageFees();
-      this.setState({ averageFees, fee: averageFees.low, balance: managerBalance });// eslint-disable-line react/no-did-update-set-state
+      const fee = averageFees.low;
+      const total = fee + this.state.gas;
+      this.setState({ averageFees, fee, total, balance: managerBalance});// eslint-disable-line react/no-did-update-set-state
     }
   }
 
@@ -220,7 +220,8 @@ class AddDelegateModal extends Component<Props> {
   changeAmount = (amount) => {
     const { managerBalance } = this.props;
     const { fee, gas } = this.state;
-    const numAmount = parseFloat(amount) * utez;
+    const newAmount = amount || '0';
+    const numAmount = parseFloat(newAmount) * utez;
     const total = numAmount + fee + gas;
     const balance = managerBalance - total;
     this.setState({ amount, total, balance });
@@ -229,8 +230,10 @@ class AddDelegateModal extends Component<Props> {
   changeDelegate = (_, delegate) => this.setState({ delegate });
   changeFee = (fee) => {
     const { managerBalance } = this.props;
-    const { gas } = this.state;
-    const total = managerBalance + fee + gas;
+    const { gas, amount } = this.state;
+    const newAmount = amount || '0';
+    const numAmount = parseFloat(newAmount) * utez;
+    const total = numAmount + fee + gas;
     const balance = managerBalance - total;
     this.setState({ fee, total, balance });
   }
@@ -287,7 +290,7 @@ class AddDelegateModal extends Component<Props> {
   render() {
     const { open, onCloseClick, t } = this.props;
     const { isLoading, averageFees, delegate, amount, fee, passPhrase, isShowedPwd, gas, total ,balance } = this.state;
-    const isDisabled = isLoading || !delegate || !amount || !passPhrase;
+    const isDisabled = isLoading || !delegate || !amount || !passPhrase || balance<1;
     return (
       <Dialog
         modal
@@ -394,7 +397,7 @@ class AddDelegateModal extends Component<Props> {
               <BalanceTitle>Remaining Balance</BalanceTitle>
               <BalanceAmount
                 weight='500'
-                color="gray3"
+                color={balance<1?'error1':'gray3'}
                 size={ms(-1)}
                 amount={balance}
               />
@@ -423,7 +426,7 @@ class AddDelegateModal extends Component<Props> {
           />
           <DelegateButton
             buttonTheme="primary"
-            disabled={isLoading || isDisabled}
+            disabled={isDisabled}
             onClick={this.createAccount}
           >
             Delegate
